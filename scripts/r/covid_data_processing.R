@@ -14,7 +14,10 @@ library(lubridate)
 
 base_url <- 'https://api.covidtracking.com'
 all_states <- '/v1/states/daily.csv'
+# current_states <- '/v1/states/current.csv'
+
 # state_specific_api <- '/v1/states/{state}/daily.csv'
+# current_state <- '/v1/states/{state}/current.csv'
 
 filename <- paste0('./data/all_states_daily_covid.csv')
 download.file(url = paste0(base_url, all_states), 
@@ -33,7 +36,9 @@ state_name_lookup_data <- read_csv(file = './data/state_lu.csv')
 state_pop_reduced <- 
   state_pop_data %>% 
   select(State, Pop, density) %>% 
-  left_join(x = ., y = state_name_lookup_data, by = c('State' = 'state')) %>% 
+  left_join(x = ., 
+            y = state_name_lookup_data, 
+            by = c('State' = 'state')) %>% 
   select(-1) %>% 
   rename(state = state_abr)
 
@@ -42,13 +47,15 @@ state_pop_reduced <-
 # (daily_{cases,deaths} / population of state) * 100,000
 state_data_enhanced <- 
   state_data %>% 
-  left_join(x = ., y = state_pop_reduced, by = c('state')) %>% 
+  left_join(x = ., 
+            y = state_pop_reduced, 
+            by = c('state')) %>% 
   mutate(date = ymd(date)) %>% 
   group_by((state)) %>% 
   arrange(state, date) %>% 
   mutate(daily_recover = recovered - lag(recovered, default = first(recovered)),
-    # daily_cases = positive - lag(positive, default = first(positive)),
-         # daily_deaths = death - lag(death, default = first(death))
+        # daily_cases = positive - lag(positive, default = first(positive)),
+        # daily_deaths = death - lag(death, default = first(death))
     ) %>%
   mutate(daily_cases_adj = (positiveIncrease / Pop) * 100000,
          daily_recover_adj = (daily_recover / Pop) * 100000,
@@ -69,8 +76,9 @@ state_enhanced_reduced <-
          daily_recover, daily_recover_adj, recovered_roll7, recovered_roll7_adj,
          deathIncrease, daily_deaths_adj, deaths_roll7, deaths_roll7_adj, 
          hospitalizedIncrease, hospitalizedCurrently, inIcuCurrently
-         
          )
 
-write_csv(file = './data/state_data_enhanced.csv', x = state_data_enhanced)
-write_csv(file = './data/state_enhanced_reduced.csv', x = state_enhanced_reduced)
+write_csv(file = './data/state_data_enhanced.csv', 
+          x = state_data_enhanced)
+write_csv(file = './data/state_enhanced_reduced.csv', 
+          x = state_enhanced_reduced)
