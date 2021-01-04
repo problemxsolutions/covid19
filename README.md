@@ -7,6 +7,7 @@ The scripts will initially focus on using R but will eventually translate the sc
 The first stage is finding open source data then determining whether there is an available API or a file download.  Once we have the data we can process each source appropriately before analyzing and visualizing the data.
 
 This first script will get data from the **[COVID Tracking Project](https://covidtracking.com/data/api)**.
+* https://problemxsolutions.com/data-engineering/data-pipelines/getting-covid-19-data/
 
 Subsequent data sources will be referenced here as well.
 
