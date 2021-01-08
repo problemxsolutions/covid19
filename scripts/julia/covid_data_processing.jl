@@ -58,12 +58,6 @@ state_pop_reduced =
         select(Not([:state]))
         rename(Dict(:state_abr => :state))
     end
-# select!(state_pop_reduced, Not([:state]))
-# rename!(state_pop_reduced, Dict(:state_abr => :state))
-
-# # Cleaning the column of values I'm using to conduct the join to enusure a clean
-# # join of values
-# state_data.state = strip.(state_data.state)
 
 # Since Julia is sensitive when applying a function to a field with missing
 # valus, I will remove those data points.  I can safely do this because I know
@@ -72,13 +66,6 @@ state_pop_reduced =
 # I dont need to implement for this effort
 dropmissing!(state_pop_reduced)
 state_pop_reduced.state = strip.(state_pop_reduced.state)
-
-# state_data_enhanced =
-#     leftjoin(
-#         state_data,
-#         state_pop_reduced,
-#         on =:state
-#     )
 
 state_data_enhanced =
     @chain state_data begin
@@ -91,11 +78,6 @@ state_data_enhanced =
 
 state_data = Nothing
 
-# state_data_enhanced[:date] = Date.(string.(state_data_enhanced.date), Dates.DateFormat("yyyymmdd"))
-# sort!(state_data_enhanced, [:state, :date])
-
-# Adjusting for population to help normalize numbers between states.
-# (daily_{cases,deaths} / population of state) * 100,000
 
 # Define functions
 function deltas(v, k)
@@ -103,38 +85,14 @@ function deltas(v, k)
 end
 
 function pop_adjusted(x, y)
+    # Adjusting for population to help normalize numbers between states.
+    # (daily_{cases,deaths} / population of state) * 100,000
     [(x / y) * 100000]
 end
 
 function moving_average(v,k)
     [ 1 <= i-k <= length(v) ? sum(@view v[(i-k+1):i])/k : 0 for i in 1:length(v) ]
 end
-
-# replace!(state_data_enhanced.recovered, missing => 0)
-# transform!(groupby(state_data_enhanced, :state), [:positiveIncrease, :Pop] => ByRow(pop_adjusted) => :daily_cases_adj)
-# transform!(groupby(state_data_enhanced, :state), [:daily_recover, :Pop] => ByRow(pop_adjusted) => :daily_recover_adj)
-# transform!(groupby(state_data_enhanced, :state), [:deathIncrease, :Pop] => ByRow(pop_adjusted) => :daily_deaths_adj)
-# transform!(groupby(state_data_enhanced, :state), :positiveIncrease => (x -> moving_average(x, 7)) => :active_roll7)
-# transform!(groupby(state_data_enhanced, :state), :daily_recover => (x -> moving_average(x, 7)) => :recovered_roll7)
-# transform!(groupby(state_data_enhanced, :state), :deathIncrease => (x -> moving_average(x, 7)) => :deaths_roll7)
-# transform!(groupby(state_data_enhanced, :state), :daily_cases_adj => (x -> moving_average(x, 7)) => :active_roll7_adj)
-# transform!(groupby(state_data_enhanced, :state), :daily_recover_adj => (x -> moving_average(x, 7)) => :recovered_roll7_adj)
-# transform!(groupby(state_data_enhanced, :state), :daily_deaths_adj => (x -> moving_average(x, 7)) => :deaths_roll7_adj)
-
-# transform!(groupby(state_data_enhanced, :state), :recovered => (x -> deltas(x, 1)) => :daily_recover)
-#
-# transform!(groupby(state_data_enhanced, :state),
-#     [:positiveIncrease, :Pop] => ByRow(pop_adjusted) => :daily_cases_adj,
-#     [:daily_recover, :Pop] => ByRow(pop_adjusted) => :daily_recover_adj,
-#     [:deathIncrease, :Pop] => ByRow(pop_adjusted) => :daily_deaths_adj)
-#
-# transform!(groupby(state_data_enhanced, :state),
-#     :positiveIncrease => (x -> moving_average(x, 7)) => :active_roll7,
-#     :daily_recover => (x -> moving_average(x, 7)) => :recovered_roll7,
-#     :deathIncrease => (x -> moving_average(x, 7)) => :deaths_roll7,
-#     :daily_cases_adj => (x -> moving_average(x, 7)) => :active_roll7_adj,
-#     :daily_recover_adj => (x -> moving_average(x, 7)) => :recovered_roll7_adj,
-#     :daily_deaths_adj => (x -> moving_average(x, 7)) => :deaths_roll7_adj)
 
 state_data_enhanced =
     @chain state_data_enhanced begin
