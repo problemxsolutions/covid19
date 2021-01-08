@@ -11,11 +11,7 @@ using HTTP
 using CSVFiles
 using DataFrames
 using Dates
-using Statistics
-using Missings
 using Chain
-
-
 
 base_url = "https://api.covidtracking.com"
 all_states = "/v1/states/daily.csv"
@@ -77,7 +73,6 @@ state_data_enhanced =
     end
 
 state_data = Nothing
-
 
 # Define functions
 function deltas(v, k)
