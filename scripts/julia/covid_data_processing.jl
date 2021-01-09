@@ -123,4 +123,4 @@ save(string(base_dir, "/data/state_enhanced_reduced_jl.csv"), state_enhanced_red
 # Alternative:
 # using CSV
 # CSV.write(string(base_dir, "/data/state_enhanced_reduced_jl_mod1.csv"),
-#     state_enhanced_reduced)
+#     state_enhanced_reduced);
