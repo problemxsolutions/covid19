@@ -7,7 +7,6 @@
 # World Population Review: US States
 # URL: https://worldpopulationreview.com/states
 
-using HTTP
 using CSVFiles
 using DataFrames
 using Dates
@@ -45,7 +44,6 @@ state_pop_data = Nothing
 
 state_name_lookup_data.state = strip.(state_name_lookup_data.state)
 
-# state_pop_reduced,
 state_pop_reduced =
     @chain state_pop_reduced begin
         leftjoin(
@@ -56,8 +54,8 @@ state_pop_reduced =
     end
 
 # Since Julia is sensitive when applying a function to a field with missing
-# valus, I will remove those data points.  I can safely do this because I know
-# the values being removed are teritories and districts that I am not
+# values, I will remove those data points.  I can safely do this because I know
+# the values being removed are territories and districts that I am not
 # processing.  There are processes you can do to work with missing values but
 # I dont need to implement for this effort
 dropmissing!(state_pop_reduced)
@@ -121,3 +119,8 @@ state_enhanced_reduced =
 
 save(string(base_dir, "/data/state_data_enhanced_jl.csv"), state_data_enhanced)
 save(string(base_dir, "/data/state_enhanced_reduced_jl.csv"), state_enhanced_reduced)
+
+# Alternative:
+# using CSV
+# CSV.write(string(base_dir, "/data/state_enhanced_reduced_jl_mod1.csv"),
+#     state_enhanced_reduced)
