@@ -110,10 +110,14 @@ state_enhanced_reduced =
         select(
             :date, :state,
             :positive, :recovered, :death,
-            :positiveIncrease, :daily_cases_adj, :active_roll7, :active_roll7_adj,
-            :daily_recover, :daily_recover_adj, :recovered_roll7, :recovered_roll7_adj,
-            :deathIncrease, :daily_deaths_adj, :deaths_roll7, :deaths_roll7_adj,
-            :hospitalizedIncrease, :hospitalizedCurrently, :inIcuCurrently
+            :positiveIncrease, :daily_cases_adj,
+            :active_roll7, :active_roll7_adj,
+            :daily_recover, :daily_recover_adj,
+            :recovered_roll7, :recovered_roll7_adj,
+            :deathIncrease, :daily_deaths_adj,
+            :deaths_roll7, :deaths_roll7_adj,
+            :hospitalizedIncrease, :hospitalizedCurrently,
+            :inIcuCurrently
         )
     end
 
