@@ -22,6 +22,8 @@ all_states <- '/v1/states/daily.csv'
 filename <- paste0('./data/all_states_daily_covid.csv')
 download.file(url = paste0(base_url, all_states), 
               destfile = filename)
+alt_method_data <- read_csv(file = paste0(base_url, all_states))
+                        
 
 # # ******************************************************************************
 # Read in the data
