@@ -21,7 +21,14 @@ all_states = "/v1/states/daily.csv"
 base_dir = "/home/linux/ProblemXSolutions.com/DataProjects/covid19"
 filename = "/data/all_states_daily_covid_jl.csv"
 
-download(string(base_url, all_states), string(base_dir, filename));
+url = string(base_url, all_states)
+download(url, string(base_dir, filename));
+
+# Alternative Method
+# import HTTP
+# import CSV
+# df = HTTP.get(url).body |> CSV.Rows |> DataFrame
+
 
 # ******************************************************************************
 # Read in the data
