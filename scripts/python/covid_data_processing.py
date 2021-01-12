@@ -21,8 +21,9 @@ all_states = '/v1/states/daily.csv'
 base_dir = '/home/linux/ProblemXSolutions.com/DataProjects/covid19'
 filename = '/data/all_states_daily_covid_py.csv'
 urllib.request.urlretrieve(url=base_url + all_states,
-                          filename=base_dir + filename)
+                           filename=base_dir + filename)
 
+# alt_method_data = pd.read_csv(base_url + all_states)
 # ******************************************************************************
 # Read in the data
 
@@ -40,11 +41,12 @@ del state_pop_data
 state_pop_reduced.loc[:, 'State'] = state_pop_reduced.loc[:, 'State'].str.strip()
 state_name_lookup_data.loc[:, 'state'] = state_name_lookup_data.loc[:, 'state'].str.strip()
 
-state_pop_reduced = pd.merge(left=state_pop_reduced,
-                             right=pd.DataFrame(state_name_lookup_data),
-                             how='left',
-                             left_on='State',
-                             right_on='state')
+state_pop_reduced = pd.merge(
+    left=state_pop_reduced,
+    right=pd.DataFrame(state_name_lookup_data),
+    how='left',
+    left_on='State',
+    right_on='state')
 
 state_pop_reduced.drop(columns=['State', 'state'],
                        inplace=True)
